@@ -1,0 +1,67 @@
+import React, { useEffect, useMemo } from 'react';
+import Modal from '../components/Modal';
+import { useProfile } from '../context/ProfileContext';
+import { ProfileStepEnum } from '../types';
+
+const ProfilePage: React.FC = () => {
+  const { profile, quote, step, getProfile, updateData, handleCancel } =
+    useProfile();
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
+
+  const { showModal, authorStatus, quoteStatus } = useMemo(() => {
+    let authorStatus = '';
+    let quoteStatus = '';
+    if (step === ProfileStepEnum.FETCH_AUTHOR_FAILED) authorStatus = 'Failed';
+    else if (step >= ProfileStepEnum.FETCH_AUTHOR_SUCCESS)
+      authorStatus = 'Completed';
+
+    if (step === ProfileStepEnum.FETCH_QUOTE_FAILED) quoteStatus = 'Failed';
+    else if (step === ProfileStepEnum.FETCH_QUOTE_SUCCESS)
+      quoteStatus = 'Completed';
+
+    return {
+      showModal: step > ProfileStepEnum.READY,
+      authorStatus,
+      quoteStatus,
+    };
+  }, [step]);
+
+  return (
+    <div>
+      <div className="mt-6 flex gap-2">
+        <img
+          src="/profile.jpeg"
+          alt="profile-avatar"
+          className="h-24 w-24 rounded-full"
+        />
+        <div className="ml-6">
+          <h1 className="mb-2 text-4xl font-semibold">
+            Welcome, {profile?.fullname}!
+          </h1>
+
+          <button
+            className="mt-2 rounded-lg border bg-blue-500 px-4 py-2 text-white shadow-lg hover:bg-blue-400"
+            onClick={updateData}>
+            Update
+          </button>
+        </div>
+      </div>
+      {!!quote?.quote && (
+        <div className="mt-8 text-sm text-slate-800">{quote?.quote}</div>
+      )}
+
+      <Modal
+        isOpen={showModal}
+        close={handleCancel}
+        title="Requesting the quote">
+        <p>Step 1: Requesting author.. {authorStatus}</p>
+        <p>Step 2: Requesting quote.. {quoteStatus}</p>
+      </Modal>
+    </div>
+  );
+};
+
+export default ProfilePage;
