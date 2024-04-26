@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import InfoPage from './pages/InfoPage';
@@ -10,7 +9,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ProfileProvider } from './context/ProfileContext';
 import { RoutePaths } from './config/routes';
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <Router>
       <GlobalProvider>

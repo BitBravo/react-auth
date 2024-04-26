@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { FC } from "react";
 
 interface ModalProps {
   isOpen: boolean;
   title: string;
   children: React.ReactNode;
-  close: () => void;
+  onClose: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, close, title, children }) => {
+const Modal: FC<ModalProps> = ({ isOpen, title, children, onClose }) => {
   if (!isOpen) return null;
 
   return (
@@ -16,8 +16,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, close, title, children }) => {
         <h2 className="text-3xl font-semibold">{title}</h2>
         <div className="py-6">{children}</div>
         <button
-          onClick={close}
-          className="rounded-lg border bg-blue-500 px-4 py-2 text-white shadow-lg hover:bg-blue-400">
+          onClick={onClose}
+          className="rounded-lg border bg-blue-500 px-4 py-2 text-white shadow-lg hover:bg-blue-400"
+        >
           Cancel
         </button>
       </div>

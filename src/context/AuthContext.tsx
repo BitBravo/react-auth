@@ -1,16 +1,10 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from 'react';
-import toast from 'react-hot-toast';
-import { AuthState } from '../types';
-import * as api from '../api/api';
-import { StorageKeys } from '../config/constants';
+import { createContext, useState, ReactNode, useEffect, FC } from "react";
+import toast from "react-hot-toast";
+import * as api from "../api/api";
+import { StorageKeys } from "../config/constants";
+import { AuthState } from "../types";
 
-interface AuthContextType {
+export interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => void;
@@ -24,11 +18,9 @@ const initialState = {
   logout: () => {},
 };
 
-const AuthContext = createContext<AuthContextType>(initialState);
+export const AuthContext = createContext<AuthContextType>(initialState);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [auth, setAuth] = useState<AuthState>({
     isAuthenticated: false,
     loading: true,
@@ -45,29 +37,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const login = async (email: string, password: string) => {
     try {
       const data = await api.login(email, password);
-      localStorage.setItem(StorageKeys.ACCESS_TOKEN, data?.data?.token ?? '');
+      localStorage.setItem(StorageKeys.ACCESS_TOKEN, data?.data?.token ?? "");
       setAuth({
         loading: false,
-        error: data?.data?.message ?? '',
+        error: data?.data?.message ?? "",
         isAuthenticated: !!data?.data?.token,
       });
 
-      if (data.success) toast.success('You logged in successfully!');
-      else toast.error(data?.data?.message ?? 'Login failed!');
+      if (data.success) toast.success("You logged in successfully!");
+      else toast.error(data?.data?.message ?? "Login failed!");
     } catch (error) {
       setAuth((prev) => ({
         ...prev,
         loading: false,
         isAuthenticated: false,
-        error: 'Login failed',
+        error: "Login failed",
       }));
-      toast.error('Login failed!');
+      toast.error("Login failed!");
     }
   };
 
   const logout = async () => {
     await api.logout();
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem("accessToken");
     setAuth({ isAuthenticated: false, loading: false, error: null });
   };
 
@@ -78,16 +70,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isAuthenticated: auth.isAuthenticated,
         login,
         logout,
-      }}>
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

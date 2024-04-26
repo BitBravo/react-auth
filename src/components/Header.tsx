@@ -1,9 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { RoutePaths } from '../config/routes';
 
-const Header: React.FC = () => {
+const Header = () => {
   const { isAuthenticated, logout } = useAuth();
 
   return (

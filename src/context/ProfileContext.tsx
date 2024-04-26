@@ -1,14 +1,14 @@
-import React, { createContext, useState, useCallback, useContext, ReactNode, useEffect, useRef } from "react";
+import { createContext, useState, useCallback, ReactNode, useEffect, useRef, FC } from "react";
 import axios, { CancelTokenSource } from "axios";
 import { fetchAuthor, fetchQuote, fetchProfile } from "../api/api";
-import { Author, ProfileStepEnum, Quote, User } from "../types";
+import { Author, ProfileStep, Quote, User } from "../types";
 
 interface ProfileContextState {
   profile: User | null;
   author: Author | null;
   quote: Quote | null;
   loading: boolean;
-  step: ProfileStepEnum;
+  step: ProfileStep;
   getProfile: () => void;
   updateData: () => void;
   handleCancel: () => void;
@@ -19,20 +19,20 @@ const initialState = {
   profile: null,
   author: null,
   quote: null,
-  step: ProfileStepEnum.READY,
+  step: ProfileStep.READY,
   getProfile: () => {},
   updateData: () => {},
   handleCancel: () => {},
 };
 
-const ProfileContext = createContext<ProfileContextState>(initialState);
+export const ProfileContext = createContext<ProfileContextState>(initialState);
 
-export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ProfileProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [profile, setProfile] = useState<User | null>(null);
   const [author, setAuthor] = useState<Author | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState<ProfileStepEnum>(ProfileStepEnum.READY);
+  const [step, setStep] = useState<ProfileStep>(ProfileStep.READY);
   const apiSourceRef = useRef<CancelTokenSource>();
 
   useEffect(() => {
@@ -57,16 +57,16 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
 
     apiSourceRef.current = axios.CancelToken.source();
 
-    setStep(ProfileStepEnum.START);
+    setStep(ProfileStep.START);
 
     try {
       const author = await fetchAuthor(apiSourceRef.current);
-      setStep(author.success ? ProfileStepEnum.FETCH_AUTHOR_SUCCESS : ProfileStepEnum.FETCH_AUTHOR_FAILED);
+      setStep(author.success ? ProfileStep.FETCH_AUTHOR_SUCCESS : ProfileStep.FETCH_AUTHOR_FAILED);
       if (author.success && author?.data?.authorId) {
         setAuthor(author.data);
         const quote = await fetchQuote(author?.data?.authorId, apiSourceRef.current);
         setQuote(quote.data);
-        setStep(quote.success ? ProfileStepEnum.FETCH_QUOTE_SUCCESS : ProfileStepEnum.FETCH_QUOTE_FAILED);
+        setStep(quote.success ? ProfileStep.FETCH_QUOTE_SUCCESS : ProfileStep.FETCH_QUOTE_FAILED);
       }
     } catch (error) {
       console.log(error);
@@ -77,7 +77,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const handleCancel = useCallback(() => {
     apiSourceRef.current?.cancel();
-    setStep(ProfileStepEnum.READY);
+    setStep(ProfileStep.READY);
   }, []);
 
   const value = {
@@ -92,12 +92,4 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;
-};
-
-export const useProfile = () => {
-  const context = useContext(ProfileContext);
-  if (context === undefined) {
-    throw new Error("useProfile must be used within a ProfileProvider");
-  }
-  return context;
 };

@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import { useAuth } from "../context/AuthContext";
-import { LoginBody } from "../types";
+import { useAuth } from "../hooks/useAuth";
+import { LoginPayload } from "../types";
 import { RoutePaths } from "../config/routes";
 
 const loginSchema = Yup.object().shape({
@@ -11,7 +11,7 @@ const loginSchema = Yup.object().shape({
   password: Yup.string().min(8, "Password must be at least 8 characters long").required("Password is required"),
 });
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
 
@@ -19,7 +19,7 @@ const LoginPage: React.FC = () => {
     if (isAuthenticated) navigate(RoutePaths.Profile);
   }, [isAuthenticated, navigate]);
 
-  const handleLogin = (values: LoginBody, { setSubmitting }: FormikHelpers<LoginBody>) => {
+  const handleLogin = (values: LoginPayload, { setSubmitting }: FormikHelpers<LoginPayload>) => {
     setSubmitting(true);
     login(values.email, values.password);
   };

@@ -26,7 +26,7 @@ export interface LogoutResponse {
 export interface ProfileResponse {
   success: boolean;
   data: {
-    fullname: string;
+    fullName: string;
     email: string;
   };
 }
