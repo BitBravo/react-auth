@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
+import Seo from "../components/Seo";
 import { useAuth } from "../hooks/useAuth";
-import { LoginPayload } from "../types";
 import { RoutePaths } from "../config/routes";
+import { LoginPayload } from "../types";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -26,6 +27,8 @@ const LoginPage = () => {
 
   return (
     <div>
+      <Seo title="Sign In" />
+
       <Formik initialValues={{ email: "", password: "" }} validationSchema={loginSchema} onSubmit={handleLogin}>
         {({ isSubmitting }) => (
           <Form>

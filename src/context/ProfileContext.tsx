@@ -52,7 +52,7 @@ export const ProfileProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const updateData = async () => {
     if (apiSourceRef.current?.cancel) {
-      apiSourceRef.current?.cancel();
+      apiSourceRef.current.cancel();
     }
 
     apiSourceRef.current = axios.CancelToken.source();

@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from "react";
+import Seo from "../components/Seo";
 import Modal from "../components/Modal";
+import LoadingSpinner from "../components/LoadingSpinner";
 import { useProfile } from "../hooks/useProfile";
 import { ProfileStep } from "../types";
-import LoadingSpinner from "../components/LoadingSpinner";
 
 const ProfilePage = () => {
   const { loading, profile, quote, step, getProfile, updateData, handleCancel } = useProfile();
@@ -31,6 +32,7 @@ const ProfilePage = () => {
 
   return (
     <div>
+      <Seo title="Profile" />
       <div className="mt-6 flex gap-2">
         <img src="/profile.jpeg" alt="profile-avatar" className="h-24 w-24 rounded-full" />
         <div className="ml-6">

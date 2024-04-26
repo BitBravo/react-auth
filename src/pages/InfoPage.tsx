@@ -1,3 +1,4 @@
+import Seo from "../components/Seo";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useInfo } from "../hooks/useInfo";
 
@@ -8,6 +9,7 @@ const InfoPage = () => {
 
   return (
     <div className="py-4">
+      <Seo title="About us" />
       <h1 className="text-3xl font-semibold text-gray-800" dangerouslySetInnerHTML={{ __html: info }} />
     </div>
   );
