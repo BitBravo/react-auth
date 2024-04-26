@@ -25,7 +25,6 @@ const LoginPage = () => {
       <Seo title="Sign In" />
       <Formik initialValues={{ email: "", password: "" }} validationSchema={loginSchema} onSubmit={handleLogin}>
         {({ isValid }) => {
-          console.log("isValid", isValid);
           return (
             <Form>
               <div className="mb-6 mt-5">
