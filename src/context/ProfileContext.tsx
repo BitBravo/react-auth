@@ -1,7 +1,9 @@
 import { createContext, useState, useCallback, ReactNode, useEffect, useRef, FC } from "react";
 import axios, { CancelTokenSource } from "axios";
+import toast from "react-hot-toast";
 import { fetchAuthor, fetchQuote, fetchProfile } from "../api/api";
-import { Author, ProfileStep, Quote, User } from "../types";
+import { Author, ErrorWithMessage, ProfileStep, Quote, User } from "../types";
+import { errorMsgs } from "../config/errorMsg";
 
 interface ProfileContextState {
   profile: User | null;
@@ -56,7 +58,6 @@ export const ProfileProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
 
     apiSourceRef.current = axios.CancelToken.source();
-
     setStep(ProfileStep.START);
 
     try {
@@ -69,8 +70,10 @@ export const ProfileProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setStep(quote.success ? ProfileStep.FETCH_QUOTE_SUCCESS : ProfileStep.FETCH_QUOTE_FAILED);
       }
     } catch (error) {
-      console.log(error);
+      const errorKey = (error as ErrorWithMessage)?.message;
+      toast.error(errorMsgs[errorKey] ?? errorKey);
     } finally {
+      handleCancel();
       setLoading(false);
     }
   };

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { RoutePaths } from '../config/routes';
+import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { RoutePaths } from "../config/routes";
 
 const Header = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -8,27 +8,19 @@ const Header = () => {
   return (
     <header className="py-4 text-black">
       <nav className="container flex gap-2">
-        <Link
-          to={RoutePaths.Info}
-          className="rounded border border-slate-300 px-4 py-1.5 hover:bg-slate-50">
+        <Link to={RoutePaths.Info} className="rounded border border-slate-300 px-4 py-1.5 hover:bg-slate-50">
           About us
         </Link>
         {!isAuthenticated ? (
-          <Link
-            to={RoutePaths.SignIn}
-            className="rounded border px-4 py-1.5 hover:bg-slate-50">
+          <Link to={RoutePaths.SignIn} className="rounded border px-4 py-1.5 hover:bg-slate-50">
             Sign In
           </Link>
         ) : (
           <>
-            <Link
-              to={RoutePaths.Profile}
-              className="rounded border px-4 py-1.5 hover:bg-slate-50">
+            <Link to={RoutePaths.Profile} className="rounded border px-4 py-1.5 hover:bg-slate-50">
               Profile
             </Link>
-            <button
-              className="rounded border px-4 py-1.5 hover:bg-slate-50"
-              onClick={logout}>
+            <button type="button" className="rounded border px-4 py-1.5 hover:bg-slate-50" onClick={logout}>
               Sign out
             </button>
           </>

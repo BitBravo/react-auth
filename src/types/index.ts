@@ -40,3 +40,11 @@ export enum ProfileStep {
   FETCH_QUOTE_FAILED = 4,
   FETCH_QUOTE_SUCCESS = 5,
 }
+
+export type ErrorWithMessage = {
+  message: string;
+};
+
+export interface ErrorMessages {
+  [key: string]: string | undefined;
+}

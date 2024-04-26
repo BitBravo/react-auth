@@ -39,6 +39,7 @@ const ProfilePage = () => {
           <h1 className="mb-2 text-4xl font-semibold">Welcome, {profile?.fullName}!</h1>
 
           <button
+            type="button"
             className="mt-2 rounded-lg border bg-blue-500 px-4 py-2 text-white shadow-lg hover:bg-blue-400"
             onClick={updateData}
           >
