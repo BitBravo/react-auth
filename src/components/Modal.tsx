@@ -16,6 +16,7 @@ const Modal: FC<ModalProps> = ({ isOpen, title, children, onClose }) => {
         <h2 className="text-3xl font-semibold">{title}</h2>
         <div className="py-6">{children}</div>
         <button
+          type="button"
           onClick={onClose}
           className="rounded-lg border bg-blue-500 px-4 py-2 text-white shadow-lg hover:bg-blue-400"
         >

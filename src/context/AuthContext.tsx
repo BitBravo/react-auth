@@ -29,13 +29,15 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem(StorageKeys.ACCESS_TOKEN);
-    if (token) {
-      setAuth((prev) => ({ ...prev, isAuthenticated: true, loading: false }));
-    }
+    setAuth((prev) => ({ ...prev, isAuthenticated: !!token, loading: false }));
   }, []);
 
   const login = async (email: string, password: string) => {
     try {
+      setAuth((prev) => ({
+        ...prev,
+        loading: true,
+      }));
       const data = await api.login(email, password);
       localStorage.setItem(StorageKeys.ACCESS_TOKEN, data?.data?.token ?? "");
       setAuth({
@@ -58,9 +60,13 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const logout = async () => {
-    await api.logout();
-    localStorage.removeItem("accessToken");
-    setAuth({ isAuthenticated: false, loading: false, error: null });
+    try {
+      await api.logout();
+      localStorage.removeItem(StorageKeys.ACCESS_TOKEN);
+      setAuth({ isAuthenticated: false, loading: false, error: null });
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
   };
 
   return (
