@@ -46,10 +46,16 @@ export const ProfileProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const getProfile = useCallback(async () => {
-    setLoading(true);
-    const userRes = await fetchProfile();
-    if (userRes.success) setProfile(userRes.data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const userRes = await fetchProfile();
+      if (userRes.success) setProfile(userRes.data);
+    } catch (error) {
+      const errorKey = (error as ErrorWithMessage)?.message;
+      toast.error(errorMsgs[errorKey] ?? errorKey);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const updateData = async () => {
