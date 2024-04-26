@@ -1,9 +1,10 @@
+import LoadingSpinner from "../components/LoadingSpinner";
 import { useInfo } from "../hooks/useInfo";
 
 const InfoPage = () => {
   const { loading, info } = useInfo();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="py-4">

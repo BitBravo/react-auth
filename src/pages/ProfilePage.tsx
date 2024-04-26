@@ -2,9 +2,10 @@ import { useEffect, useMemo } from "react";
 import Modal from "../components/Modal";
 import { useProfile } from "../hooks/useProfile";
 import { ProfileStep } from "../types";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const ProfilePage = () => {
-  const { profile, quote, step, getProfile, updateData, handleCancel } = useProfile();
+  const { loading, profile, quote, step, getProfile, updateData, handleCancel } = useProfile();
 
   useEffect(() => {
     getProfile();
@@ -25,6 +26,8 @@ const ProfilePage = () => {
       quoteStatus,
     };
   }, [step]);
+
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div>
