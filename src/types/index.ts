@@ -1,20 +1,11 @@
-export type RegisterBody = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  teamId?: string;
-  teamName?: string;
-};
-
-export type LoginBody = {
+export type LoginPayload = {
   email: string;
   password: string;
 };
 
 export interface User {
   email: string;
-  fullname: string;
+  fullName: string;
 }
 
 export interface Author {
@@ -41,7 +32,7 @@ export interface ProfileState {
   quote: Quote | null;
 }
 
-export enum ProfileStepEnum {
+export enum ProfileStep {
   READY = 0,
   START = 1,
   FETCH_AUTHOR_FAILED = 2,
